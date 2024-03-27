@@ -1,0 +1,7 @@
+{
+    "name": "hichamagm/izagent_shared",
+    "description": "A short description of what your package does",
+    "require": {
+        "php": ">=8.2",
+    }
+}
