@@ -1,6 +1,6 @@
 <?php
 
-namespace hichamagm\izagentShared\Requests;
+namespace Hichamagm\IzagentShared\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

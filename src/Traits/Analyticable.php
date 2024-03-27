@@ -1,6 +1,6 @@
 <?php
 
-namespace hichamagm\izagentShared\Traits;
+namespace Hichamagm\IzagentShared\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
