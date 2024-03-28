@@ -9,18 +9,30 @@ trait Analyticable {
 
     function scopeChartData($query, Request $request)
     {
-        $column = $request->exists('column') ? $request->input('column') : 'DATE(created_at)';
+        $inputs = $request->query('chart');
+        $column = isset($inputs['groupedColumn']) ? $inputs['groupedColumn'] : 'DATE(created_at)';
 
         if(isset($this->safeParams[$column])){
-            $query = $query->select(DB::raw($column.' as selected_column'), DB::raw('COUNT(*) as count'))
-            ->groupBy('selected_column');
+            $query = $query->select(DB::raw($column.' as selected_column'), $this->chartDataTypeQuery($inputs));
+            $query = $query->groupBy('selected_column');
         }
 
-        return $query->get()->pluck('count', 'selected_column');
+        return $query->get()->pluck("value", "selected_column");
+    }
+
+    private function chartDataTypeQuery($inputs){
+        $query = "";
+        if($inputs['type'] == 'count'){
+            $query = DB::raw('COUNT(*) as value');
+        }elseif($inputs['type'] == 'sum' && isset($inputs['sumColumn'])){
+            $sumColumn = $inputs['sumColumn'];
+            $query = DB::raw("SUM($sumColumn) as value");
+        }
+
+        return $query;
     }
 
     public function scopeColumnsData($query, Request $request){
-
         $columns = [];
 
         foreach($request->input('columns') as $column){
