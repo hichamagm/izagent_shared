@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Hichamagm\IzagentShared\Middlewares;
 
 use Closure;
 use Illuminate\Http\Request;
