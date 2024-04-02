@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace Hichamagm\IzagentShared\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
