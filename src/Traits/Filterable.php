@@ -19,33 +19,35 @@ trait Filterable {
 
         if(count($request->all()) > 0){
 
-            foreach($this->safeParams as $param => $operators){
-                $query = $request->query($param);
+            if(isset($this->safeParams)){
+                foreach($this->safeParams as $param => $operators){
+                    $query = $request->query($param);
 
-                if(!isset($query)){
-                    continue;
-                }
-
-                $column = $this->columnMap[$param] ?? $param;
-                
-                foreach($operators as $operator){
-                    if(isset($query[$operator])){
-                        if(isset($this->operatorWhereMap[$operator])){
-                            $where = [$column, $this->operatorWhereMap[$operator], $query[$operator]];
-                            $modelQuery = $modelQuery->where([$where]);
-                        }
-                        elseif($operator == 'lk'){
-                            $modelQuery = $modelQuery->where($column, 'like', '%'.$query[$operator].'%');
-                        }
-                        elseif($operator == 'in'){
-                            $modelQuery = $modelQuery->whereIn($column, array_values($query[$operator]));
-                        }
-                        elseif($operator == 'notin'){
-                            $modelQuery = $modelQuery->whereNotIn($column, array_values($query[$operator]));
-                        }
+                    if(!isset($query)){
+                        continue;
                     }
-                    elseif(!is_array($query)){
-                        $modelQuery = $modelQuery->where($column, $request->input($param));
+
+                    $column = $this->columnMap[$param] ?? $param;
+                    
+                    foreach($operators as $operator){
+                        if(isset($query[$operator])){
+                            if(isset($this->operatorWhereMap[$operator])){
+                                $where = [$column, $this->operatorWhereMap[$operator], $query[$operator]];
+                                $modelQuery = $modelQuery->where([$where]);
+                            }
+                            elseif($operator == 'lk'){
+                                $modelQuery = $modelQuery->where($column, 'like', '%'.$query[$operator].'%');
+                            }
+                            elseif($operator == 'in'){
+                                $modelQuery = $modelQuery->whereIn($column, array_values($query[$operator]));
+                            }
+                            elseif($operator == 'notin'){
+                                $modelQuery = $modelQuery->whereNotIn($column, array_values($query[$operator]));
+                            }
+                        }
+                        elseif(!is_array($query)){
+                            $modelQuery = $modelQuery->where($column, $request->input($param));
+                        }
                     }
                 }
             }

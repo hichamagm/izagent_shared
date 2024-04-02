@@ -2,7 +2,8 @@
     "name": "hichamagm/izagent_shared",
     "description": "A short description of what your package does",
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "laravel/framework": "^10.10"
     },
     "autoload": {
         "psr-4": {
