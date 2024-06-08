@@ -111,7 +111,7 @@ trait Filterable {
         return $modelQuery;
     }
 
-    public function scopeForUser($q)
+    public function scopeDefaultFilters($q)
     {
         if(app('access') == 'limited'){
             $q->where('user_id', app('user')->id);
