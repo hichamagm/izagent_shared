@@ -110,4 +110,11 @@ trait Filterable {
 
         return $modelQuery;
     }
+
+    public function scopeDefaultFilters($q)
+    {
+        if(app('access') == 'limited'){
+            $q->forUser();
+        }
+    }
 }
