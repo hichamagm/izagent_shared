@@ -22,7 +22,6 @@ class EmailConnectionService {
 
     public function getEmailConnection(int $id, array $params = []){
         $response = Http::get("$this->serviceApi/$id", $params);
-
         return new EmailConnectionModel($response->object());
     }
 }
