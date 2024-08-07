@@ -9,14 +9,11 @@ class DataUtil {
     {
         if (is_array($data)) {
             $result = [];
-    
             foreach ($data as $key => $value) {
                 $newKey = Str::snake($key);
                 $result[$newKey] = self::snakeKeys($value);
             }
-    
             return $result;
-            
         } else {
             return $data;
         }
