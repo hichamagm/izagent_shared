@@ -49,6 +49,8 @@ class BearerTokenValidationMiddleware
                 return $user;
             });
 
+            session(['user_id' => $user->id]);
+
             return $next($request);
         } else {
             // Token is not valid, return an unauthorized response
