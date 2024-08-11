@@ -4,7 +4,7 @@ namespace Hichamagm\IzagentShared\Boot;
 use Hichamagm\IzagentShared\Guards\UserSessionGuard;
 use Illuminate\Support\Facades\Auth;
 
-class SharedBoot {
+class ServiceBoot {
 
     static function AuthBoot()
     {
