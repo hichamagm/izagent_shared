@@ -1,4 +1,5 @@
-<?
+<?php
+
 namespace Hichamagm\IzagentShared\Boot;
 
 use Hichamagm\IzagentShared\Guards\UserSessionGuard;
