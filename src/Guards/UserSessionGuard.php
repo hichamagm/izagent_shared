@@ -4,7 +4,7 @@ namespace Hichamagm\IzagentShared\Guards;
 
 use Illuminate\Contracts\Auth\Guard;
 
-class CustomSessionGuard implements Guard
+class UserSessionGuard implements Guard
 {
     protected $session;
     protected $user;
