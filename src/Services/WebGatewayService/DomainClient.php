@@ -10,7 +10,7 @@ use Hichamagm\IzagentShared\Validation\ValidateServiceResourceExistence;
 
 class DomainClient extends BaseService
 {
-    protected $baseUrl = "http://localhost/web_gateway_service";
+    protected $baseUrl = "http://localhost/web_gateway_service/domains";
     protected $headers = [];
 
     public function __construct($userId)
