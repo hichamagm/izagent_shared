@@ -4,6 +4,8 @@ namespace Hichamagm\IzagentShared\Validation;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class ValidateServiceCriteriaExistence implements ValidationRule
 {
@@ -11,9 +13,9 @@ class ValidateServiceCriteriaExistence implements ValidationRule
     protected $name;
     protected $shouldExist;
 
-    public function __construct(Closure $serviceCallback, string $name, $shouldExist = true)
+    public function __construct($response, string $name, $shouldExist = true)
     {
-        $this->resource = $serviceCallback(); // The callback should return one of the models
+        $this->resource = $response; // The callback should return one of the models
         $this->name = $name;
         $this->shouldExist = $shouldExist;
     }

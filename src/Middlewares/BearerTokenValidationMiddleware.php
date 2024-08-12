@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class BearerTokenValidationMiddleware
 {
@@ -16,7 +17,6 @@ class BearerTokenValidationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         $fullAccessIps = [
             "127.0.0.1"
         ];
@@ -28,8 +28,9 @@ class BearerTokenValidationMiddleware
             app()->bind('user', fn() => []);
 
             //New
-            if($request->header('x-user_id')){
-                session(['user_id' => $request->header('x-user_id')]);
+            
+            if($request->header('X-User-Id')){
+                session(['user_id' => $request->header('X-User-Id')]);
                 return $next($request);
             }
 

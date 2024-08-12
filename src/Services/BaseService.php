@@ -2,6 +2,9 @@
 
 namespace Hichamagm\IzagentShared\Services;
 
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Log;
+
 class BaseService
 {
     /**
@@ -11,22 +14,20 @@ class BaseService
      * @param string $model
      * @return mixed
      */
-    public function sendRequest(\Closure $callback, string $model = null, $collection = false, $paginated = false)
+    public function sendRequest(Response $response, string $model = null, $collection = false, $paginated = false)
     {
-        $response = $callback();
-
         if ($response->successful()) {
             $json = $response->json();
 
             if($model){
                 if($paginated && $collection){
-                    return collect([
+                    return (Object) [
                         ...$json,
                         "data" => $model::fromCollection($json["data"])
-                    ]);
+                    ];
                 }
 
-                return $collection ? $model::fromCollection($json) :$model::fromArray($json);
+                return $collection ? $model::fromCollection($json) : $model::fromArray($json);
             }
 
             return $json;
