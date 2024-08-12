@@ -2,7 +2,7 @@
 
 namespace Hichamagm\IzagentShared\Models;
 
-class Domain
+class EmailCampaign
 {
     public $id;
     public $name;
