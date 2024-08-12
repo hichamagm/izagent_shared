@@ -28,7 +28,7 @@ class BearerTokenValidationMiddleware
             app()->bind('user', fn() => []);
 
             //New
-            if($request->header('x-user_id') > 0){
+            if($request->header('x-user_id')){
                 session(['user_id' => $request->header('x-user_id')]);
                 return $next($request);
             }
