@@ -5,6 +5,8 @@ namespace Hichamagm\IzagentShared\Services\WebGatewayService;
 use Hichamagm\IzagentShared\Services\BaseService;
 use Illuminate\Support\Facades\Http;
 use Hichamagm\IzagentShared\Models\Domain;
+use Hichamagm\IzagentShared\Validation\ValidateServiceCriteriaExistence;
+use Hichamagm\IzagentShared\Validation\ValidateServiceResourceExistence;
 
 class DomainClient extends BaseService
 {
@@ -44,6 +46,24 @@ class DomainClient extends BaseService
     {
         return $this->sendRequest(
             fn() => Http::withHeaders($this->headers)->delete("{$this->baseUrl}/domains/{$domainId}")
+        );
+    }
+
+    public function validateResourceExistence($id, $shouldExist)
+    {
+        return new ValidateServiceResourceExistence(
+            fn() => $this->getOne($id),
+            "Domain",
+            $shouldExist
+        );
+    }
+
+    public function validateCriteriaExistence($searchCriteria, $shouldExist)
+    {
+        return new ValidateServiceCriteriaExistence(
+            fn() => $this->getMany($searchCriteria),
+            "Domain",
+            $shouldExist
         );
     }
 }

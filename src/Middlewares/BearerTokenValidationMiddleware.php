@@ -22,10 +22,18 @@ class BearerTokenValidationMiddleware
         ];
 
         if(in_array($request->ip(), $fullAccessIps)){
+
+            //Deprecated
             app()->bind('access', fn() => "full");
             app()->bind('user', fn() => []);
 
-            return $next($request);
+            //New
+            if($request->header('x-user_id') > 0){
+                session(['user_id' => $request->header('x-user_id')]);
+                return $next($request);
+            }
+
+            return response()->json(["message" => "Not authorized"], 401);
         }
 
         app()->bind('access', fn() => "limited");
