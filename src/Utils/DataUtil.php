@@ -1,6 +1,8 @@
 <?php
 
 namespace Hichamagm\IzagentShared\Utils;
+
+use Hichamagm\IzagentShared\Models\Domain;
 use Illuminate\Support\Str;
 
 class DataUtil {
