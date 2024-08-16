@@ -8,21 +8,16 @@ use Hichamagm\IzagentShared\Validation\ValidateServiceResourceExistence;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class Domain extends BaseService
+class MlsListing extends BaseService
 {
     public $id;
-    public $name;
-    public $status;
-    public $serviceName;
-    public $type;
-    public $nextFetch;
-    public $errorMsg;
-    public $sslEnabled;
+    public $email;
+    public $phoneNumber;
     public $createdAt;
     public $updatedAt;
 
     protected $headers = ["Accept" => "application/json"];
-    protected $baseUrl = "http://localhost/service_web_router/api/domains";
+    protected $baseUrl = "http://localhost/service_site_user/api/users";
 
     public function __construct(array $attributes = [])
     {
@@ -40,13 +35,6 @@ class Domain extends BaseService
         foreach ($attributes as $key => $value) {
             $this->{Str::camel($key)} = $value;
         }
-    }
-
-    public static function forUser($id)
-    {
-        $instance = new self();
-        $instance->headers = array_merge($instance->headers, ["X-User-Id" => $id]);
-        return $instance;
     }
 
     public static function fromArray(array $attributes)
@@ -96,7 +84,7 @@ class Domain extends BaseService
     {
         return new ValidateServiceResourceExistence(
             $this->getOne($id),
-            "Domain",
+            "MLS Listing",
             $shouldExist
         );
     }
@@ -105,7 +93,7 @@ class Domain extends BaseService
     {
         return new ValidateServiceCriteriaExistence(
             $this->getMany($searchCriteria),
-            "Domain",
+            "MLS Listing",
             $shouldExist
         );
     }
