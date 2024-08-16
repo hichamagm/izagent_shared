@@ -16,10 +16,8 @@ class BaseService
      * @param bool $paginated
      * @return mixed
      */
-    protected function sendRequest(\Closure $callback, ?string $model = null, bool $collection = false, bool $paginated = false)
+    protected function sendRequest(Response $response, ?string $model = null, bool $collection = false, bool $paginated = false)
     {
-        $response = $callback();
-
         if ($response->successful()) {
             return $this->mapResponse($response, $model, $collection, $paginated);
         }

@@ -13,7 +13,7 @@ class Domain extends BaseService
     public $id;
     public $name;
     public $status;
-    public $service;
+    public $serviceName;
     public $type;
     public $nextFetch;
     public $errorMsg;
@@ -62,7 +62,7 @@ class Domain extends BaseService
     public function getOne($domainId)
     {
         return $this->sendRequest(
-            fn() => Http::withHeaders($this->headers)->get("{$this->baseUrl}/$domainId"),
+            Http::withHeaders($this->headers)->get("{$this->baseUrl}/$domainId"),
             self::class
         );
     }
@@ -70,7 +70,7 @@ class Domain extends BaseService
     public function getMany(array $queryParams = [])
     {
         return $this->sendRequest(
-            fn() => Http::withHeaders($this->headers)->get($this->baseUrl, $queryParams),
+            Http::withHeaders($this->headers)->get($this->baseUrl, $queryParams),
             self::class,
             true,
             true
@@ -80,7 +80,7 @@ class Domain extends BaseService
     public function postOne(array $domainData)
     {
         return $this->sendRequest(
-            fn() => Http::withHeaders($this->headers)->post($this->baseUrl, $domainData),
+            Http::withHeaders($this->headers)->post($this->baseUrl, $domainData),
             self::class
         );
     }
@@ -88,7 +88,7 @@ class Domain extends BaseService
     public function deleteOne($domainId)
     {
         return $this->sendRequest(
-            fn() => Http::withHeaders($this->headers)->delete("{$this->baseUrl}/$domainId")
+            Http::withHeaders($this->headers)->delete("{$this->baseUrl}/$domainId")
         );
     }
 
