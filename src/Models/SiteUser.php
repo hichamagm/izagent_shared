@@ -8,7 +8,7 @@ use Hichamagm\IzagentShared\Validation\ValidateServiceResourceExistence;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class MlsListing extends BaseService
+class SiteUser extends BaseService
 {
     public $id;
     public $email;
@@ -84,7 +84,7 @@ class MlsListing extends BaseService
     {
         return new ValidateServiceResourceExistence(
             $this->getOne($id),
-            "MLS Listing",
+            "Site User",
             $shouldExist
         );
     }
@@ -93,7 +93,7 @@ class MlsListing extends BaseService
     {
         return new ValidateServiceCriteriaExistence(
             $this->getMany($searchCriteria),
-            "MLS Listing",
+            "Site User",
             $shouldExist
         );
     }
