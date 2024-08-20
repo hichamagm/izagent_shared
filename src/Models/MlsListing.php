@@ -23,7 +23,7 @@ class MlsListing extends BaseService
     public $updatedAt;
 
     protected $headers = ["Accept" => "application/json"];
-    protected $baseUrl = "http://localhost/service_mls/api/listings";
+    protected $baseUrl = "http://localhost:8089/api/listings";
 
     public function __construct(array $attributes = [])
     {

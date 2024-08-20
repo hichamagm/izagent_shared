@@ -22,7 +22,7 @@ class Domain extends BaseService
     public $updatedAt;
 
     protected $headers = ["Accept" => "application/json"];
-    protected $baseUrl = "http://localhost/service_web_router/api/domains";
+    protected $baseUrl = "http://localhost:8082/api/domains";
 
     public function __construct(array $attributes = [])
     {

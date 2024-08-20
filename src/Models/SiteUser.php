@@ -17,7 +17,7 @@ class SiteUser extends BaseService
     public $updatedAt;
 
     protected $headers = ["Accept" => "application/json"];
-    protected $baseUrl = "http://localhost/service_site_user/api/users";
+    protected $baseUrl = "http://localhost:8089/api/users";
 
     public function __construct(array $attributes = [])
     {
