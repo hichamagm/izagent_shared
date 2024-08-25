@@ -4,10 +4,5 @@
     "require": {
         "php": ">=8.2",
         "laravel/framework": "^10.10"
-    },
-    "autoload": {
-        "psr-4": {
-            "Hichamagm\\IzagentShared\\": "src/"
-        }
     }
 }

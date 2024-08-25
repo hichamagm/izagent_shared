@@ -28,7 +28,7 @@ class ValidateServiceCriteriaExistence implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if(!isset($this->resource->data)){
-            $fail("Domain service is currently unavailable");
+            $fail("$this->name service is currently unavailable");
         }
 
         if($this->shouldExist == true && (isset($this->resource->data) && count($this->resource->data) == 0)){

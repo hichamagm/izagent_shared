@@ -17,12 +17,21 @@ class BearerTokenValidationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $fullAccessIps = [
-            "127.0.0.1"
+        $acceptedHosts = [
+            "service_web_router",
+            "service_contacts",
+            "service_site_builder",
+            "service_site_frontend",
+            "service_site_user",
+            "service_site_analytics",
+            "service_email_campaigns",
+            "service_auth",
+            "service_listings",
+            "service_media",
+            "service_mls"
         ];
 
-        if(in_array($request->ip(), $fullAccessIps)){
-
+        if(in_array($request->getHost(), $acceptedHosts) && $request->getPort() == 80){
             //Deprecated
             app()->bind('access', fn() => "full");
             app()->bind('user', fn() => []);
@@ -34,7 +43,7 @@ class BearerTokenValidationMiddleware
                 return $next($request);
             }
 
-            return response()->json(["message" => "Not authorized"], 401);
+            return response()->json(["message" => "Unauthorized"], 401);
         }
 
         app()->bind('access', fn() => "limited");
@@ -42,8 +51,12 @@ class BearerTokenValidationMiddleware
         // Extract the Bearer token from the request
         $token = $request->bearerToken();
 
+        if(!$token){
+            return response()->json(["message" => "Unauthorized"], 401);
+        }
+
         // Replace 'your-auth-endpoint' with the actual authentication endpoint
-        $authEndpoint = 'http://localhost/auth/validate_token';
+        $authEndpoint = 'http://service_auth:80/validate_token';
 
         // Make a request to the authentication endpoint
         $response = Http::withHeaders(['Authorization' => 'Bearer ' . $token])
@@ -57,6 +70,8 @@ class BearerTokenValidationMiddleware
             app()->bind('user', function() use($user){
                 return $user;
             });
+
+            Log::info($user->id);
 
             session(['user_id' => $user->id]);
 
