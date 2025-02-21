@@ -27,13 +27,15 @@ class ValidateServiceCriteriaExistence implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if(!isset($this->resource->data)){
+        $data = $this->resource->json();
+        
+        if(!$this->resource->successful()){
             $fail("$this->name service is currently unavailable");
         }
 
-        if($this->shouldExist == true && (isset($this->resource->data) && count($this->resource->data) == 0)){
+        if($this->shouldExist == true && (isset($data["data"]) && count($data["data"]) == 0)){
             $fail("$this->name does not exist.");
-        }elseif($this->shouldExist == false && (isset($this->resource->data) && count($this->resource->data) > 0)){
+        }elseif($this->shouldExist == false && (isset($data["data"]) && count($data["data"]) > 0)){
             $fail("$this->name already exist.");
         }
     }

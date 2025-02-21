@@ -2,7 +2,7 @@
 
 namespace Hichamagm\IzagentShared\Models\ServiceMls;
 
-use Hichamagm\IzagentShared\Services\BaseService;
+use Hichamagm\IzagentShared\Models\BaseService;
 use Hichamagm\IzagentShared\Validation\ValidateServiceCriteriaExistence;
 use Hichamagm\IzagentShared\Validation\ValidateServiceResourceExistence;
 use Illuminate\Support\Facades\Http;
@@ -10,80 +10,27 @@ use Illuminate\Support\Str;
 
 class MlsListing extends BaseService
 {
-    public $id;
-    public $strtAddress;
-    public $price;
-    public $city;
-    public $thumbnail;
-    public $community;
-    public $country;
-    public $mlsId;
-    public $category;
-    public $createdAt;
-    public $updatedAt;
-
     protected $headers = ["Accept" => "application/json"];
     protected $baseUrl = "http://service_mls:80/api/listings";
 
-    public function __construct(array $attributes = [])
+    public function getOne($id, array $queryParams = [])
     {
-        $this->fillAttributes($attributes);
-    }
-
-    /**
-     * Fills the model attributes from an array.
-     *
-     * @param array $attributes
-     * @return void
-     */
-    protected function fillAttributes(array $attributes)
-    {
-        foreach ($attributes as $key => $value) {
-            $this->{Str::camel($key)} = $value;
-        }
-    }
-    
-    public static function fromArray(array $attributes)
-    {
-        return new self($attributes);
-    }
-
-    public static function fromCollection(array $items)
-    {
-        return array_map(fn($item) => new self($item), $items);
-    }
-
-    public function getOne($domainId)
-    {
-        return $this->sendRequest(
-            Http::withHeaders($this->headers)->get("{$this->baseUrl}/$domainId"),
-            self::class
-        );
+        return Http::withHeaders($this->headers)->get("{$this->baseUrl}/$id", $queryParams);
     }
 
     public function getMany(array $queryParams = [])
     {
-        return $this->sendRequest(
-            Http::withHeaders($this->headers)->get($this->baseUrl, $queryParams),
-            self::class,
-            true,
-            true
-        );
+        return Http::withHeaders($this->headers)->get($this->baseUrl, $queryParams);
     }
 
-    public function postOne(array $domainData)
+    public function getManyForMap(array $queryParams = [])
     {
-        return $this->sendRequest(
-            Http::withHeaders($this->headers)->post($this->baseUrl, $domainData),
-            self::class
-        );
+        return Http::withHeaders($this->headers)->get("{$this->baseUrl}/map", $queryParams);
     }
 
-    public function deleteOne($domainId)
+    public function getManyAddresses(string $query)
     {
-        return $this->sendRequest(
-            Http::withHeaders($this->headers)->delete("{$this->baseUrl}/$domainId")
-        );
+        return Http::withHeaders($this->headers)->get("{$this->baseUrl}/address_autocomplete", ["query" => $query]);
     }
 
     public function validateResourceExistence($id, $shouldExist)

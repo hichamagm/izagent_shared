@@ -11,8 +11,10 @@ trait Filterable {
         'eq' => '=',
         'lt' => '<',
         'ltq' => '<=',
+        'lte' => '<=',
         'gt' => '>',
         'gtq' => '>=',
+        'gte' => '>=',
     ];
 
     function scopeFilter($modelQuery, Request $request){
@@ -44,8 +46,11 @@ trait Filterable {
                             elseif($operator == 'notin'){
                                 $modelQuery = $modelQuery->whereNotIn($column, array_values($query[$operator]));
                             }
+                            elseif($operator == 'bt'){
+                                $modelQuery = $modelQuery->whereBetween($column, array_values($query[$operator]));
+                            }
                         }
-                        elseif(!is_array($query)){
+                        elseif(!is_array($query) && $operator == "eq"){
                             $modelQuery = $modelQuery->where($column, $request->input($param));
                         }
                     }
@@ -105,7 +110,6 @@ trait Filterable {
                 $modelQuery = $modelQuery->addSelect($groupBy);
                 $modelQuery = $modelQuery->groupBy($groupBy);
             }
-
         }
 
         return $modelQuery;

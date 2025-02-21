@@ -2,44 +2,19 @@
 
 namespace Hichamagm\IzagentShared\Models\ServiceSiteUser;
 
-use Hichamagm\IzagentShared\Services\BaseService;
+use Hichamagm\IzagentShared\Models\BaseService;
 use Hichamagm\IzagentShared\Validation\ValidateServiceCriteriaExistence;
 use Hichamagm\IzagentShared\Validation\ValidateServiceResourceExistence;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 
 class User extends BaseService
 {
-    public $id;
-    public $email;
-    public $phoneNumber;
-    public $createdAt;
-    public $updatedAt;
+    public $headers = ["Accept" => "application/json"];
+    protected $baseUrl = "http://service_site_user:80/api/users";
 
-    protected $headers = ["Accept" => "application/json"];
-    protected $baseUrl = "http://service_site_site:80/api/users";
-
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
-        $this->fillAttributes($attributes);
-    }
-
-    /**
-     * Fills the model attributes from an array.
-     *
-     * @param array $attributes
-     * @return void
-     */
-    protected function fillAttributes(array $attributes)
-    {
-        foreach ($attributes as $key => $value) {
-            $this->{Str::camel($key)} = $value;
-        }
-    }
-
-    public static function fromArray(array $attributes)
-    {
-        return new self($attributes);
+        $this->headers = [...$this->headers, "X-Forwarded-Host" => gethostname()];
     }
 
     public static function fromCollection(array $items)
@@ -47,17 +22,30 @@ class User extends BaseService
         return array_map(fn($item) => new self($item), $items);
     }
 
+    public static function forSiteUser($id)
+    {
+        $instance = new self();
+        $instance->headers = array_merge($instance->headers, ["X-User-Id" => $id]);
+
+        return $instance;
+    }
+
+    public static function forPlatformUser($id)
+    {
+        $instance = new self();
+        $instance->headers = array_merge($instance->headers, ["X-Platform-User-Id" => $id]);
+
+        return $instance;
+    }
+
     public function getOne($domainId)
     {
-        return $this->sendRequest(
-            Http::withHeaders($this->headers)->get("{$this->baseUrl}/$domainId"),
-            self::class
-        );
+        return Http::withHeaders($this->headers)->get("{$this->baseUrl}/$domainId");
     }
 
     public function getMany(array $queryParams = [])
     {
-        return $this->sendRequest(
+        return $this->handleResponse(
             Http::withHeaders($this->headers)->get($this->baseUrl, $queryParams),
             self::class,
             true,
@@ -67,15 +55,17 @@ class User extends BaseService
 
     public function postOne(array $domainData)
     {
-        return $this->sendRequest(
-            Http::withHeaders($this->headers)->post($this->baseUrl, $domainData),
-            self::class
-        );
+        return Http::withHeaders($this->headers)->post($this->baseUrl, $domainData);
+    }
+
+    public function updateOne($id, array $domainData)
+    {
+        return Http::withHeaders($this->headers)->patch("{$this->baseUrl}/$id", $domainData);
     }
 
     public function deleteOne($domainId)
     {
-        return $this->sendRequest(
+        return $this->handleResponse(
             Http::withHeaders($this->headers)->delete("{$this->baseUrl}/$domainId")
         );
     }
@@ -96,5 +86,14 @@ class User extends BaseService
             "Site User",
             $shouldExist
         );
+    }
+
+    public function validateCredentials($email, $password, $websiteId)
+    {
+        return Http::withHeaders($this->headers)->post("{$this->baseUrl}/validate_credentials", [
+            "websiteId" => $websiteId,
+            "email" => $email,
+            "password" => $password
+        ]);
     }
 }
