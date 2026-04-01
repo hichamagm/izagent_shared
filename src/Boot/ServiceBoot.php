@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ServiceBoot {
 
-    static function AuthBoot()
+    public static function AuthBoot()
     {
         Auth::extend('shared-guard', function ($app, $name, array $config) {
             return new CustomGuard($app->make(Request::class));
         });
     }
 
-    static function AppBoot()
+    public static function AppBoot()
     {
         JsonResource::withoutWrapping();
     }
